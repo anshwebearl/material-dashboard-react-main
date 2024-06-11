@@ -73,48 +73,23 @@ function Tables() {
     vendor: <Author name={el.brand_name} email={el.additional_email} image={team2} />,
     contact_person: <Author name={el.contact_person_name} email={el.email} image={team2} />,
     vendor_type: (
-      <MDTypography component="a" href="#" variant="button" color="text" fontWeight="bold">
-        {el.vendor_type}
+      <MDTypography component="a" variant="button" color="text" fontWeight="bold">
+        {el.vendorCategory.name}
       </MDTypography>
     ),
     state: (
-      <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
+      <MDTypography component="a" variant="button" color="text" fontWeight="medium">
         {/* {new Date(el.createdAt).toLocaleDateString("en-GB")} */}
         {el.state}
       </MDTypography>
     ),
     city: (
-      <MDTypography component="a" href="#" variant="button" color="text" fontWeight="medium">
+      <MDTypography component="a" variant="button" color="text" fontWeight="medium">
         {/* {new Date(el.updatedAt).toLocaleDateString("en-GB")} */}
         {el.city}
       </MDTypography>
     ),
     action: (
-      // <FormControl fullWidth>
-      //   <Select
-      //     value={el.status}
-      //     sx={{
-      //       bgcolor:
-      //         el.status === "pending" ? "yellow" : el.status === "approved" ? "green" : "red",
-      //       color: el.status === "pending" ? "white" : el.status === "approved" ? "white" : "white",
-      //     }}
-      //     onChange={(e) => changeVendorStatus(e, el._id)}
-      //   >
-      //     <MenuItem
-      //       value={"pending"}
-      //       sx={{ color: el.status === "pending" ? "white" : "black" }}
-      //       selected={el.status === "pending"}
-      //     >
-      //       Pending
-      //     </MenuItem>
-      //     <MenuItem value={"approved"} selected={el.status === "approved"}>
-      //       Approved
-      //     </MenuItem>
-      //     <MenuItem value={"declined"} selected={el.status === "declined"}>
-      //       Declined
-      //     </MenuItem>
-      //   </Select>
-      // </FormControl>
       <MDTypography
         component="a"
         onClick={() => navigate(`/vendors/${el._id}`)}
@@ -139,7 +114,7 @@ function Tables() {
     }
     let filteredData = vendors;
     if (vendorType) {
-      filteredData = filteredData.filter((el) => el.vendor_type === vendorType);
+      filteredData = filteredData.filter((el) => el.vendorCategory.name === vendorType);
     }
     if (state) {
       filteredData = filteredData.filter((el) => el.state === state);

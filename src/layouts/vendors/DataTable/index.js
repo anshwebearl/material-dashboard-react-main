@@ -36,8 +36,6 @@ import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDPagination from "components/MDPagination";
 
-import { vendorTypeData } from "../../../data/vendorTypeData.js";
-
 // Material Dashboard 2 React example components
 import DataTableHeadCell from "./DataTableHeadCell";
 import DataTableBodyCell from "./DataTableBodyCell";
@@ -71,6 +69,28 @@ function DataTable({
   const allStates = State.getStatesOfCountry("IN");
 
   const [allCities, setAllCities] = useState([]);
+  const [vendorTypeData, setVendorTypeData] = useState([]);
+
+  const getAllVendorCategory = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/vendor-category/getall", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const jsonData = await response.json();
+      if (jsonData.success) {
+        setVendorTypeData(jsonData.vendorCategories);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllVendorCategory();
+  }, []);
 
   const handleStateChange = (e) => {
     const selectedState = e.target.value;
@@ -239,8 +259,8 @@ function DataTable({
                           label="filter"
                         >
                           <MenuItem value="">none</MenuItem>
-                          {vendorTypeData.map((option, idx) => (
-                            <MenuItem key={option.idx} value={option.name}>
+                          {vendorTypeData.map((option) => (
+                            <MenuItem key={option._id} value={option.name}>
                               {option.name}
                             </MenuItem>
                           ))}

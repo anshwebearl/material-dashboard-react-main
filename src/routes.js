@@ -50,6 +50,8 @@ import Users from "layouts/users";
 import ResetPassword from "layouts/authentication/reset-password/cover";
 import VendorDetails from "layouts/vendors/vendorDetails";
 import VendorCategoryTable from "layouts/vendors/vendorCategory";
+import VendorCategoryDetailsTable from "layouts/vendors/vendorCategory/vendorCategoryDetails";
+import CategoryIcon from "@mui/icons-material/Category";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -71,14 +73,22 @@ const routes = [
     route: "/vendors",
     component: <Vendors />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Tables",
-  //   key: "tables",
-  //   icon: <Icon fontSize="small">table_view</Icon>,
-  //   route: "/tables",
-  //   component: <Tables />,
-  // },
+  {
+    type: "collapse",
+    name: "Vendor Category",
+    key: "vendor-category",
+    icon: <CategoryIcon />,
+    route: "/vendor-category",
+    component: <VendorCategoryTable />,
+  },
+  {
+    type: "route",
+    name: "Vendor Category Details",
+    key: "vendor-category",
+    icon: <CategoryIcon />,
+    route: "/vendor-category/:id",
+    component: <VendorCategoryDetailsTable />,
+  },
   // {
   //   type: "collapse",
   //   name: "SubCategory",

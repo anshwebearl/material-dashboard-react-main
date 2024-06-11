@@ -67,7 +67,7 @@ function Overview() {
       });
       const jsonData = await response.json();
       if (jsonData.success) {
-        setVendor(jsonData.vendor);
+        setVendor(jsonData.vendor[0]);
       }
     } catch (error) {
       console.log(error);
@@ -117,6 +117,7 @@ function Overview() {
       <MDBox mb={2} />
       <Header
         brand_name={vendor.brand_name}
+        vendor_type={vendor.vendorCategory?.name}
         tabValue={tabvalue}
         setTabValue={setTabValue}
         vendorStatus={vendor.status}
@@ -136,7 +137,7 @@ function Overview() {
                     email: vendor.email,
                     location: `${vendor.city}, ${vendor.state}`,
                     pincode: String(vendor.pincode),
-                    vendorType: vendor.vendor_type,
+                    vendorType: vendor.vendorCategory?.name,
                   }}
                   social={[]}
                   isSocial={false}

@@ -23,13 +23,12 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-
-import MDAvatar from "components/MDAvatar";
+import { useNavigate } from "react-router-dom";
+import MDButton from "components/MDButton";
 
 const Author = ({ image, name, email }) => (
   <MDBox display="flex" alignItems="center" lineHeight={1}>
-    <MDAvatar src={image} name={name} size="sm" />
-    <MDBox ml={2} lineHeight={1}>
+    <MDBox lineHeight={1}>
       <MDTypography display="block" variant="button" fontWeight="medium">
         {name}
       </MDTypography>
@@ -39,21 +38,28 @@ const Author = ({ image, name, email }) => (
 );
 
 function VendorCategoryTable() {
-  const columns = [
-    { Header: "Name", accessor: "category_name", width: "25%" },
-    { Header: "Created", accessor: "createdAt", width: "25%" },
-    { Header: "Last Updated", accessor: "updatedAt", width: "25%" },
-    { Header: "Actions", accessor: "actions", width: "25%" },
-  ];
-
   const [openInsertForm, setOpenInsertForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
+  const [openDeleteForm, setOpenDeleteForm] = useState(false);
+
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
 
+  const token = localStorage.getItem("token");
+
+  const navigate = useNavigate();
+
+  const columns = [
+    { Header: "Name", accessor: "category_name", width: "20%" },
+    { Header: "Created", accessor: "createdAt", width: "10%" },
+    { Header: "Last Updated", accessor: "updatedAt", width: "10%" },
+    { Header: "Actions", accessor: "actions", width: "10%" },
+    { Header: "View", accessor: "view", width: "15%" },
+  ];
+
   const rows = categories.map((el) => ({
-    category_name: <Author name={el.category_name} email={el._id} />,
+    category_name: <Author name={el.name} email={el._id} />,
     createdAt: (
       <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
         {new Date(el.createdAt).toLocaleDateString("en-GB")}
@@ -66,41 +72,51 @@ function VendorCategoryTable() {
     ),
     actions: (
       <ButtonGroup variant="outlined" aria-label="button group">
-        <IconButton aria-label="delete" size="medium" onClick={() => handleDelete(el._id)}>
+        <IconButton aria-label="delete" size="medium" onClick={() => handleDeleteForm(el._id)}>
           <DeleteIcon color="error" />
         </IconButton>
         <IconButton
           aria-label="delete"
           size="medium"
-          onClick={() => handleEditForm(el._id, el.category_name)}
+          onClick={() => handleEditForm(el._id, el.name)}
         >
           <EditIcon color="success" />
         </IconButton>
       </ButtonGroup>
     ),
+    view: (
+      <MDButton>
+        <MDTypography
+          component="a"
+          fontWeight="bold"
+          variant="caption"
+          sx={{
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+          onClick={() => navigate(`/vendor-category/${el._id}`)}
+        >
+          VIEW
+        </MDTypography>
+      </MDButton>
+    ),
   }));
 
   const getCategories = async () => {
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQzMzM4Y2QxMzMwMTMxMDVkOGMyNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6InN1cGVyYWRtaW4iLCJpYXQiOjE3MTc0MTAxNzl9.X56jSoZUouwPcQAw6cg6o8pwjNgBjnkYe5rqkMtgCvc";
-      const response = await fetch(
-        "https://chemical-api-usa2.onrender.com/api/category/categories",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const response = await fetch("http://localhost:8000/api/vendor-category/getall", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
       const jsonData = await response.json();
       console.log(jsonData);
-      setCategories(jsonData.categories);
+      setCategories(jsonData.vendorCategories);
     } catch (error) {
       console.log(error);
     }
@@ -108,10 +124,8 @@ function VendorCategoryTable() {
 
   const handleDelete = async (_id) => {
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQzMzM4Y2QxMzMwMTMxMDVkOGMyNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6InN1cGVyYWRtaW4iLCJpYXQiOjE3MTc0MTAxNzl9.X56jSoZUouwPcQAw6cg6o8pwjNgBjnkYe5rqkMtgCvc";
       const response = await fetch(
-        `https://chemical-api-usa2.onrender.com/api/category/categories/${_id}`,
+        `http://localhost:8000/api/admin/delete-vendor-category/${_id}`,
         {
           method: "DELETE",
           headers: {
@@ -127,28 +141,29 @@ function VendorCategoryTable() {
       const jsonData = await response.json();
       console.log(jsonData);
       getCategories();
+      setOpenDeleteForm(false);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleDeleteForm = (_id) => {
+    setOpenDeleteForm(true);
+    setCategoryId(_id);
   };
 
   const handleInsert = async () => {
     setCategoryName("");
     console.log("Category Name:", categoryName);
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQzMzM4Y2QxMzMwMTMxMDVkOGMyNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6InN1cGVyYWRtaW4iLCJpYXQiOjE3MTc0MTAxNzl9.X56jSoZUouwPcQAw6cg6o8pwjNgBjnkYe5rqkMtgCvc";
-      const response = await fetch(
-        `https://chemical-api-usa2.onrender.com/api/category/categories`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ category_name: categoryName }), // Ensure category_name is included in the request body
-        }
-      );
+      const response = await fetch(`http://localhost:8000/api/admin/create-vendor-category`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ categoryName: categoryName }), // Ensure category_name is included in the request body
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -165,19 +180,16 @@ function VendorCategoryTable() {
   };
 
   const handleUpdate = async (_id) => {
-    console.log("Category Name:", categoryName);
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWQzMzM4Y2QxMzMwMTMxMDVkOGMyNGYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6InN1cGVyYWRtaW4iLCJpYXQiOjE3MTc0MTAxNzl9.X56jSoZUouwPcQAw6cg6o8pwjNgBjnkYe5rqkMtgCvc";
       const response = await fetch(
-        `https://chemical-api-usa2.onrender.com/api/category/categories/${_id}`,
+        `http://localhost:8000/api/admin/update-vendor-category/${_id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ category_name: categoryName }),
+          body: JSON.stringify({ updatedCategoryName: categoryName }),
         }
       );
 
@@ -186,7 +198,6 @@ function VendorCategoryTable() {
       }
 
       const jsonData = await response.json();
-      console.log(jsonData);
       setOpenEditForm(false);
       setCategoryName("");
       getCategories();
@@ -232,7 +243,10 @@ function VendorCategoryTable() {
                   variant="contained"
                   color="info"
                   startIcon={<AddCircleOutlineIcon />}
-                  onClick={() => setOpenInsertForm(true)}
+                  onClick={() => {
+                    setOpenInsertForm(true);
+                    setCategoryName("");
+                  }}
                 >
                   Insert
                 </Button>
@@ -252,7 +266,7 @@ function VendorCategoryTable() {
       </MDBox>
       <Footer />
 
-      {/* Form Dialog */}
+      {/* insert category */}
       <Dialog open={openInsertForm} onClose={() => setOpenInsertForm(false)}>
         <DialogTitle>Insert Category</DialogTitle>
         <DialogContent>
@@ -269,14 +283,15 @@ function VendorCategoryTable() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenInsertForm(false)}>Cancel</Button>
-          <Button onClick={handleInsert} color="primary">
+          <Button onClick={handleInsert} color="primary" disabled={!categoryName}>
             Ok
           </Button>
         </DialogActions>
       </Dialog>
 
+      {/* edit category */}
       <Dialog open={openEditForm} onClose={() => setOpenEditForm(false)}>
-        <DialogTitle>update Category</DialogTitle>
+        <DialogTitle>Update Vendor Category Name</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -291,7 +306,33 @@ function VendorCategoryTable() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEditForm(false)}>Cancel</Button>
-          <Button onClick={() => handleUpdate(categoryId)} color="primary">
+          <Button onClick={() => handleUpdate(categoryId)} color="primary" disabled={!categoryName}>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* delete category */}
+      <Dialog
+        open={openDeleteForm}
+        onClose={() => {
+          setOpenDeleteForm(false);
+          setCategoryName("");
+          setCategoryId("");
+        }}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenDeleteForm(false);
+              setCategoryName("");
+              setCategoryId("");
+            }}
+          >
+            Cancel
+          </Button>
+          <Button onClick={() => handleDelete(categoryId)} color="primary">
             Ok
           </Button>
         </DialogActions>

@@ -39,7 +39,15 @@ import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
 import MDButton from "components/MDButton";
 
-function Header({ children, brand_name, tabValue, setTabValue, vendorStatus, updateVendorStatus }) {
+function Header({
+  children,
+  brand_name,
+  tabValue,
+  setTabValue,
+  vendorStatus,
+  updateVendorStatus,
+  vendor_type,
+}) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -117,9 +125,14 @@ function Header({ children, brand_name, tabValue, setTabValue, vendorStatus, upd
               lineHeight={1}
               sx={{ display: "flex", alignItems: "center", gap: "30px" }}
             >
-              <MDTypography variant="h5" fontWeight="medium">
-                {brand_name}
-              </MDTypography>
+              <MDBox>
+                <MDTypography variant="h5" fontWeight="medium">
+                  {brand_name}
+                </MDTypography>
+                <MDTypography variant="caption" sx={{ fontSize: "15px" }}>
+                  {vendor_type}
+                </MDTypography>
+              </MDBox>
               <MDButton
                 variant="contained"
                 color={
