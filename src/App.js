@@ -54,26 +54,6 @@ import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
 
 export default function App() {
-  const [admin, setAdmin] = useState({});
-
-  const getAdmin = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch("http://localhost:8000/api/admin/getAdmin", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const jsonData = await response.json();
-      if (jsonData.success) {
-        setAdmin(jsonData.admin);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,

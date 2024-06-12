@@ -40,10 +40,15 @@ import { useNavigate } from "react-router-dom";
 function Dashboard() {
   const navigate = useNavigate();
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const getAdmin = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8000/api/admin/getAdmin", {
+      const response = await fetch(`${BASE_URL}/admin/getAdmin`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

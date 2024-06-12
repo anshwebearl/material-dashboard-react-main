@@ -50,6 +50,11 @@ const Author = ({ image, name, email }) => (
 function Tables() {
   const navigate = useNavigate();
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const [vendors, setVendors] = useState([]);
   const [filteredVendors, setFilteredVendors] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -128,7 +133,7 @@ function Tables() {
   const getVendors = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/api/admin/getVendors", {
+      const response = await fetch(`${BASE_URL}/admin/getVendors`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -146,7 +151,7 @@ function Tables() {
   const getAdmin = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8000/api/admin/getAdmin", {
+      const response = await fetch(`${BASE_URL}/admin/getAdmin`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

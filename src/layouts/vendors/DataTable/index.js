@@ -71,9 +71,14 @@ function DataTable({
   const [allCities, setAllCities] = useState([]);
   const [vendorTypeData, setVendorTypeData] = useState([]);
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const getAllVendorCategory = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/vendor-category/getall", {
+      const response = await fetch(`${BASE_URL}/vendor-category/getall`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

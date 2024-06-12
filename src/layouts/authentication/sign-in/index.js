@@ -15,6 +15,11 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { Alert } from "@mui/material";
 
 function Basic() {
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -45,7 +50,7 @@ function Basic() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/api/admin/login", {
+      const response = await fetch(`${BASE_URL}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +72,7 @@ function Basic() {
   const getAdmin = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:8000/api/admin/getAdmin", {
+      const response = await fetch(`${BASE_URL}/admin/getAdmin`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

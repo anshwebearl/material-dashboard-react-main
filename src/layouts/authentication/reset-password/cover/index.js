@@ -34,6 +34,11 @@ import { useNavigate } from "react-router-dom";
 function Cover() {
   const navigate = useNavigate();
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const token = document.cookie.valueOf("token").split("=")[1];
 
   const [otpSent, setOtpSent] = useState(false);
@@ -89,19 +94,16 @@ function Cover() {
       return;
     }
     try {
-      const response = await fetch(
-        "http://localhost:8000/api/admin/changepassword/6661984aeb54b4acdb7d4691",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            otp: "123456",
-            new_password: newPassword,
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/changepassword/6661984aeb54b4acdb7d4691`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          otp: "123456",
+          new_password: newPassword,
+        }),
+      });
       const data = await response.json();
       if (data.success) {
         console.log(data.message);
@@ -117,7 +119,7 @@ function Cover() {
 
   const getAdmin = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/admin/getAdmin", {
+      const response = await fetch(`${BASE_URL}/admin/getAdmin`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

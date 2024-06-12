@@ -44,6 +44,11 @@ const Author = ({ image, name, email }) => (
 function VendorCategoryDetailsTable() {
   const { id } = useParams();
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const [categoryName, setCategoryName] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [categoryProperties, setCategoryProperties] = useState([]);
@@ -143,16 +148,13 @@ function VendorCategoryDetailsTable() {
 
   const getCategory = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/vendor-category/get-additional-details/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/vendor-category/get-additional-details/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -168,7 +170,7 @@ function VendorCategoryDetailsTable() {
   // subcategory functions
   const handleInsertSubCategory = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/add-vendor-subcategory/${id}`, {
+      const response = await fetch(`${BASE_URL}/admin/add-vendor-subcategory/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -198,17 +200,14 @@ function VendorCategoryDetailsTable() {
 
   const handleDeleteSubCategory = async (subcategoryId) => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/delete-vendor-subcategory/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ subcategoryId: subcategoryId }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/delete-vendor-subcategory/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ subcategoryId: subcategoryId }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -232,17 +231,14 @@ function VendorCategoryDetailsTable() {
 
   const handleUpdateSubCategory = async (subcategoryId) => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/update-vendor-subcategory/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ subcategoryId: subcategoryId, subCategoryName: subcategoryName }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/update-vendor-subcategory/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ subcategoryId: subcategoryId, subCategoryName: subcategoryName }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -261,7 +257,7 @@ function VendorCategoryDetailsTable() {
   // property functions
   const handlePropertyInsert = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/add-vendor-property/${id}`, {
+      const response = await fetch(`${BASE_URL}/admin/add-vendor-property/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -311,7 +307,7 @@ function VendorCategoryDetailsTable() {
 
   const handleDeleteProperty = async (property_id) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/delete-vendor-property/${id}`, {
+      const response = await fetch(`${BASE_URL}/admin/delete-vendor-property/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -345,7 +341,7 @@ function VendorCategoryDetailsTable() {
 
   const handlePropertyUpdate = async (propertyId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/update-vendor-property/${id}`, {
+      const response = await fetch(`${BASE_URL}/admin/update-vendor-property/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -52,6 +52,11 @@ import { Snackbar } from "@mui/material";
 function Overview() {
   const { id } = useParams();
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const [vendor, setVendor] = useState({});
   const [tabvalue, setTabValue] = useState(0);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -59,7 +64,7 @@ function Overview() {
   const getVendors = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8000/api/admin/getVendors/${id}`, {
+      const response = await fetch(`${BASE_URL}/admin/getVendors/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -77,19 +82,16 @@ function Overview() {
   const updateVendorStatus = async (status) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/update-vendor-status/${vendor._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            status: status,
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/update-vendor-status/${vendor._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          status: status,
+        }),
+      });
       const jsonData = await response.json();
       if (jsonData.success) {
         setOpenSnackbar(true);

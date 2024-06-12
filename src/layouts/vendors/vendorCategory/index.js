@@ -38,6 +38,11 @@ const Author = ({ image, name, email }) => (
 );
 
 function VendorCategoryTable() {
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
   const [openInsertForm, setOpenInsertForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [openDeleteForm, setOpenDeleteForm] = useState(false);
@@ -105,7 +110,7 @@ function VendorCategoryTable() {
 
   const getCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/vendor-category/getall", {
+      const response = await fetch(`${BASE_URL}/vendor-category/getall`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -124,15 +129,12 @@ function VendorCategoryTable() {
 
   const handleDelete = async (_id) => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/delete-vendor-category/${_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/delete-vendor-category/${_id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -156,7 +158,7 @@ function VendorCategoryTable() {
     setCategoryName("");
     console.log("Category Name:", categoryName);
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/create-vendor-category`, {
+      const response = await fetch(`${BASE_URL}/admin/create-vendor-category`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,17 +183,14 @@ function VendorCategoryTable() {
 
   const handleUpdate = async (_id) => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/update-vendor-category/${_id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ updatedCategoryName: categoryName }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/admin/update-vendor-category/${_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ updatedCategoryName: categoryName }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
