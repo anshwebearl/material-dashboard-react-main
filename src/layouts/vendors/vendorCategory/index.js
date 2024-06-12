@@ -255,7 +255,7 @@ function VendorCategoryTable() {
                 <DataTable
                   table={{ columns, rows }}
                   isSorted={false}
-                  entriesPerPage={false}
+                  entriesPerPage={true}
                   showTotalEntries={false}
                   noEndBorder
                 />

@@ -67,10 +67,10 @@ function VendorCategoryDetailsTable() {
 
   // subcat rows-cols
   const subcat_columns = [
-    { Header: "Name", accessor: "category_name", width: "25%" },
-    { Header: "Created", accessor: "createdAt", width: "25%" },
-    { Header: "Last Updated", accessor: "updatedAt", width: "25%" },
-    { Header: "Actions", accessor: "actions", width: "25%" },
+    { Header: "Name", accessor: "category_name", width: "40%" },
+    { Header: "Created", accessor: "createdAt", width: "20%" },
+    { Header: "Last Updated", accessor: "updatedAt", width: "20%" },
+    { Header: "Actions", accessor: "actions", width: "20%" },
   ];
   const subcat_rows = subcategories.map((el) => ({
     category_name: <Author name={el.subCategoryName} email={el._id} />,
@@ -421,7 +421,7 @@ function VendorCategoryDetailsTable() {
                 <DataTable
                   table={{ columns: subcat_columns, rows: subcat_rows }}
                   isSorted={false}
-                  entriesPerPage={false}
+                  entriesPerPage={true}
                   showTotalEntries={false}
                   noEndBorder
                 />
@@ -469,7 +469,7 @@ function VendorCategoryDetailsTable() {
                 <DataTable
                   table={{ columns: cat_property_columns, rows: cat_property_rows }}
                   isSorted={false}
-                  entriesPerPage={false}
+                  entriesPerPage={true}
                   showTotalEntries={false}
                   noEndBorder
                 />
