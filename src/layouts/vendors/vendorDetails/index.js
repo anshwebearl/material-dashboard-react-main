@@ -122,7 +122,7 @@ function Overview() {
         vendor_type={vendor.vendorCategory?.name}
         tabValue={tabvalue}
         setTabValue={setTabValue}
-        vendorStatus={vendor.status}
+        vendorStatus={vendor.status || ""}
         updateVendorStatus={updateVendorStatus}
       >
         {tabvalue === 0 ? (
