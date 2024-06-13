@@ -146,7 +146,7 @@ function Header({
                 onClick={handleButtonClick}
               >
                 <MDTypography variant="subtitle" color="white" sx={{ fontSize: "12px" }}>
-                  {vendorStatus}
+                  {vendorStatus.toUpperCase()}
                 </MDTypography>
               </MDButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>

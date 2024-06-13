@@ -58,6 +58,8 @@ function DataTable({
   setState,
   city,
   setCity,
+  status,
+  setStatus,
 }) {
   const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
   const entries = entriesPerPage.entries
@@ -314,6 +316,27 @@ function DataTable({
                               {option.name}
                             </MenuItem>
                           ))}
+                        </Select>
+                      </FormControl>
+                    ) : (
+                      <></>
+                    )}
+                    {column.Header === "Status" ? (
+                      <FormControl
+                        color="info"
+                        variant="standard"
+                        sx={{ fontSize: "10px", width: "fit-content" }}
+                      >
+                        <FilterAltIcon />
+                        <Select
+                          value={status}
+                          onChange={(e) => setStatus(e.target.value)}
+                          label="status"
+                        >
+                          <MenuItem value="">none</MenuItem>
+                          <MenuItem value="pending">PENDING</MenuItem>
+                          <MenuItem value="approved">APPROVED</MenuItem>
+                          <MenuItem value="declined">DECLINED</MenuItem>
                         </Select>
                       </FormControl>
                     ) : (

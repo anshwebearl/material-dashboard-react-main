@@ -62,6 +62,7 @@ function Tables() {
   const [vendorType, setVendorType] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
+  const [status, setStatus] = useState("");
 
   const [isFilter, setIsFilter] = useState(false);
 
@@ -71,6 +72,7 @@ function Tables() {
     { Header: "Vendor Type", accessor: "vendor_type", width: "5%" },
     { Header: "State", accessor: "state", width: "5%" },
     { Header: "City", accessor: "city", width: "5%" },
+    { Header: "Status", accessor: "status", width: "5%" },
     { Header: "Action", accessor: "action", width: "5%" },
   ];
 
@@ -94,6 +96,11 @@ function Tables() {
         {el.city}
       </MDTypography>
     ),
+    status: (
+      <MDTypography component="a" variant="button" color="text" fontWeight="medium">
+        {el.status.toUpperCase()}
+      </MDTypography>
+    ),
     action: (
       <MDTypography
         component="a"
@@ -103,7 +110,7 @@ function Tables() {
             cursor: "pointer",
           },
         }}
-        variant="caption"
+        variant="button"
         color="text"
         fontWeight="medium"
       >
@@ -114,7 +121,7 @@ function Tables() {
 
   const handleFilter = () => {
     setIsFilter(true);
-    if (!vendorType && !state && !city) {
+    if (!vendorType && !state && !city && !status) {
       setIsFilter(false);
     }
     let filteredData = vendors;
@@ -126,6 +133,9 @@ function Tables() {
     }
     if (city) {
       filteredData = filteredData.filter((el) => el.city === city);
+    }
+    if (status) {
+      filteredData = filteredData.filter((el) => el.status === status);
     }
     setFilteredVendors(filteredData);
   };
@@ -168,7 +178,7 @@ function Tables() {
 
   useEffect(() => {
     handleFilter();
-  }, [vendorType, state, city]);
+  }, [vendorType, state, city, status]);
 
   useEffect(() => {
     getVendors();
@@ -214,7 +224,7 @@ function Tables() {
                   paddingTop: "10px",
                 }}
               >
-                {(vendorType || state || city) && (
+                {(vendorType || state || city || status) && (
                   <MDButton
                     variant="contained"
                     color="primary"
@@ -223,6 +233,7 @@ function Tables() {
                       setVendorType("");
                       setCity("");
                       setState("");
+                      setStatus("");
                     }}
                   >
                     <MDTypography variant="caption" color="white">
@@ -243,6 +254,8 @@ function Tables() {
                   setState={setState}
                   city={city}
                   setCity={setCity}
+                  status={status}
+                  setStatus={setStatus}
                 />
               </MDBox>
             </Card>
