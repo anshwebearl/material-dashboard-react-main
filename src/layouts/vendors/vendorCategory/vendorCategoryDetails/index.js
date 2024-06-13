@@ -588,8 +588,39 @@ function VendorCategoryDetailsTable() {
           >
             <FormControlLabel value="textInput" control={<Radio />} label="Text Input" />
             <FormControlLabel value="radioButton" control={<Radio />} label="Radio Button" />
+            <FormControlLabel value="multiSelect" control={<Radio />} label="Multi Select" />
           </RadioGroup>
           {propertyType === "radioButton" && (
+            <MDBox>
+              {propertyInputs.map((input, index) => (
+                <MDBox key={index} display="flex" alignItems="center">
+                  <TextField
+                    margin="normal"
+                    label={`Input ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input}
+                    onChange={(e) => handlePropertyInputChange(index, e.target.value)}
+                  />
+                  <IconButton
+                    aria-label="remove input"
+                    onClick={() => handleRemovePropertyInput(index)}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                </MDBox>
+              ))}
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<AddIcon />}
+                onClick={handleAddPropertyInput}
+              >
+                Add Input
+              </Button>
+            </MDBox>
+          )}
+          {propertyType === "multiSelect" && (
             <MDBox>
               {propertyInputs.map((input, index) => (
                 <MDBox key={index} display="flex" alignItems="center">
@@ -628,7 +659,7 @@ function VendorCategoryDetailsTable() {
             disabled={
               !propertyName ||
               !propertyDescription ||
-              (propertyType === "radioButton" &&
+              ((propertyType === "radioButton" || propertyType === "multiSelect") &&
                 (propertyInputs.length < 2 || propertyInputs.some((input) => !input)))
             }
           >
@@ -669,8 +700,39 @@ function VendorCategoryDetailsTable() {
           >
             <FormControlLabel value="textInput" control={<Radio />} label="Text Input" />
             <FormControlLabel value="radioButton" control={<Radio />} label="Radio Button" />
+            <FormControlLabel value="multiSelect" control={<Radio />} label="Muulti Select" />
           </RadioGroup>
           {propertyType === "radioButton" && (
+            <MDBox>
+              {propertyInputs.map((input, index) => (
+                <MDBox key={index} display="flex" alignItems="center">
+                  <TextField
+                    margin="normal"
+                    label={`Input ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input}
+                    onChange={(e) => handlePropertyInputChange(index, e.target.value)}
+                  />
+                  <IconButton
+                    aria-label="remove input"
+                    onClick={() => handleRemovePropertyInput(index)}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                </MDBox>
+              ))}
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<AddIcon />}
+                onClick={handleAddPropertyInput}
+              >
+                Add Input
+              </Button>
+            </MDBox>
+          )}
+          {propertyType === "multiSelect" && (
             <MDBox>
               {propertyInputs.map((input, index) => (
                 <MDBox key={index} display="flex" alignItems="center">
@@ -709,7 +771,7 @@ function VendorCategoryDetailsTable() {
             disabled={
               !propertyName ||
               !propertyDescription ||
-              (propertyType === "radioButton" &&
+              ((propertyType === "radioButton" || propertyType === "multiSelect") &&
                 (propertyInputs.length < 2 || propertyInputs.some((input) => !input)))
             }
           >
