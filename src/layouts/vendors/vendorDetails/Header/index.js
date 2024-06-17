@@ -173,14 +173,26 @@ function Header({
                     </Icon>
                   }
                 />
-                <Tab
-                  label="Projects"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      work
-                    </Icon>
-                  }
-                />
+                {vendor_type === "Venues" && (
+                  <Tab
+                    label="Menu"
+                    icon={
+                      <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                        local_dining
+                      </Icon>
+                    }
+                  />
+                )}
+                {vendor_type === "Venues" && (
+                  <Tab
+                    label="Banquets"
+                    icon={
+                      <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                        landscape
+                      </Icon>
+                    }
+                  />
+                )}
                 {/* <Tab
                   label="Settings"
                   icon={

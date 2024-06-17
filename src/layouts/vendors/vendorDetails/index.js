@@ -43,6 +43,9 @@ import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
+import MenuTable from "./MenuTable";
+import BanquetTable from "./BanquetTable";
+
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DefaultProjectCard from "./DefaultProjectCard";
@@ -125,7 +128,7 @@ function Overview() {
         vendorStatus={vendor.status || ""}
         updateVendorStatus={updateVendorStatus}
       >
-        {tabvalue === 0 ? (
+        {tabvalue === 0 && (
           <MDBox mt={5} mb={3}>
             <Grid container spacing={1}>
               <Grid item xs={12} md={6} xl={4} sx={{ display: "flex" }}>
@@ -182,35 +185,40 @@ function Overview() {
               </Grid>
             </Grid>
           </MDBox>
-        ) : (
+        )}
+        {tabvalue === 1 && vendor.vendorCategory?.name === "Venues" && (
           <>
             <MDBox pt={2} px={2} lineHeight={1.25}>
               <MDTypography variant="h6" fontWeight="medium">
-                Projects
+                Menu
               </MDTypography>
-              <MDBox mb={1}>
-                <MDTypography variant="button" color="text">
-                  Architects design houses
-                </MDTypography>
-              </MDBox>
             </MDBox>
             <MDBox p={2}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} md={6} xl={3}>
-                  <DefaultProjectCard
-                    image={homeDecor1}
-                    label="project #2"
-                    title="modern"
-                    description="As Uber works through a huge amount of internal management turmoil."
-                    action={{
-                      type: "internal",
-                      route: "/pages/profile/profile-overview",
-                      color: "info",
-                      label: "view project",
-                    }}
-                  />
-                </Grid>
-              </Grid>
+              {/* <DefaultProjectCard
+                      image={homeDecor1}
+                      label="project #2"
+                      title="modern"
+                      description="As Uber works through a huge amount of internal management turmoil."
+                      action={{
+                        type: "internal",
+                        route: "/pages/profile/profile-overview",
+                        color: "info",
+                        label: "view project",
+                      }}
+                    /> */}
+              <MenuTable vendor_id={vendor._id} />
+            </MDBox>
+          </>
+        )}
+        {tabvalue === 2 && vendor.vendorCategory?.name === "Venues" && (
+          <>
+            <MDBox pt={2} px={2} lineHeight={1.25}>
+              <MDTypography variant="h6" fontWeight="medium">
+                Menu
+              </MDTypography>
+            </MDBox>
+            <MDBox p={2}>
+              <BanquetTable vendor_id={vendor._id} />
             </MDBox>
           </>
         )}
