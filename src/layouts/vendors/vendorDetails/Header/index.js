@@ -193,6 +193,16 @@ function Header({
                     }
                   />
                 )}
+                (
+                <Tab
+                  label="Projects"
+                  icon={
+                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
+                      work
+                    </Icon>
+                  }
+                />
+                )
                 {/* <Tab
                   label="Settings"
                   icon={

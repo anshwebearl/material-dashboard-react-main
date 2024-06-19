@@ -45,6 +45,7 @@ import team4 from "assets/images/team-4.jpg";
 
 import MenuTable from "./MenuTable";
 import BanquetTable from "./BanquetTable";
+import ProjectsGrid from "./ProjectsGrid";
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -219,6 +220,18 @@ function Overview() {
             </MDBox>
             <MDBox p={2}>
               <BanquetTable vendor_id={vendor._id} />
+            </MDBox>
+          </>
+        )}
+        {tabvalue === 3 && (
+          <>
+            <MDBox pt={2} px={2} lineHeight={1.25}>
+              <MDTypography variant="h6" fontWeight="medium">
+                Projects
+              </MDTypography>
+            </MDBox>
+            <MDBox p={2}>
+              <ProjectsGrid vendor_id={id} />
             </MDBox>
           </>
         )}

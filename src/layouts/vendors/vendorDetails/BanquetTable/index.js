@@ -7,6 +7,16 @@ import { Typography } from "@mui/material";
 const CustomHeader = ({ vendor_id }) => {
   const token = localStorage.getItem("token");
 
+  const BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_BASE_URL_DEV
+      : process.env.REACT_APP_API_BASE_URL_PROD;
+
+  const IMG_BASE_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_IMAGE_BASE_URL_DEV
+      : process.env.REACT_APP_IMAGE_BASE_URL_PROD;
+
   const [banquet, setBanquet] = useState([]);
 
   const columns = [
@@ -16,6 +26,8 @@ const CustomHeader = ({ vendor_id }) => {
     { Header: "Max Capacity", accessor: "max_capacity" },
     { Header: "State", accessor: "state" },
     { Header: "City", accessor: "city" },
+    { Header: "Cover Photo", accessor: "cover_photo" },
+    { Header: "Additional Photos", accessor: "additional_photos" },
   ];
 
   const rows = banquet?.map((item) => ({
@@ -49,12 +61,27 @@ const CustomHeader = ({ vendor_id }) => {
         {item.city}
       </MDTypography>
     ),
+    cover_photo: (
+      <MDTypography component="a" variant="button" color="text" fontWeight="medium">
+        <a
+          target="_blank"
+          href={`${IMG_BASE_URL}/${item.cover_photo.split("/\\").join("/")}`}
+          rel="noreferrer"
+        >
+          cover_photo
+        </a>
+      </MDTypography>
+    ),
+    additional_photos: (
+      <MDTypography component="a" variant="button" color="text" fontWeight="medium">
+        {item.additional_photos.map((el, idx) => (
+          <a target="_blank" key={idx} href={`${IMG_BASE_URL}/${el}`} rel="noreferrer">
+            photo {idx + 1} <br />
+          </a>
+        ))}
+      </MDTypography>
+    ),
   }));
-
-  const BASE_URL =
-    process.env.NODE_ENV === "development"
-      ? process.env.REACT_APP_API_BASE_URL_DEV
-      : process.env.REACT_APP_API_BASE_URL_PROD;
 
   const getAllBanquetItems = async () => {
     try {
