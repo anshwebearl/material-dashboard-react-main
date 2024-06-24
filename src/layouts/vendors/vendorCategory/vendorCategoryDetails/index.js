@@ -67,6 +67,7 @@ function VendorCategoryDetailsTable() {
   const [propertyDescription, setPropertyDescription] = useState("");
   const [propertyType, setPropertyType] = useState("textInput");
   const [propertyInputs, setPropertyInputs] = useState([]);
+  const [multiSelectWithTextInputs, setMultiSelectWithTextInputs] = useState([]);
 
   const token = localStorage.getItem("token");
 
@@ -256,6 +257,7 @@ function VendorCategoryDetailsTable() {
 
   // property functions
   const handlePropertyInsert = async () => {
+    console.log(multiSelectWithTextInputs);
     try {
       const response = await fetch(`${BASE_URL}/admin/add-vendor-property/${id}`, {
         method: "PUT",
@@ -268,6 +270,7 @@ function VendorCategoryDetailsTable() {
           propertyDescription,
           propertyType,
           inputs: propertyInputs,
+          multiSelectWithTextInputs: multiSelectWithTextInputs,
         }),
       });
       if (!response.ok) {
@@ -279,6 +282,7 @@ function VendorCategoryDetailsTable() {
       setPropertyDescription("");
       setPropertyType("textInput");
       setPropertyInputs([]);
+      setMultiSelectWithTextInputs([]);
       setOpenPropertyInsertForm(false);
       getCategory();
     } catch (error) {
@@ -336,6 +340,7 @@ function VendorCategoryDetailsTable() {
     setPropertyDescription(property.propertyDescription);
     setPropertyType(property.propertyType);
     setPropertyInputs(property.inputs);
+    setMultiSelectWithTextInputs(property.multiSelectWithTextInputs);
     setOpenPropertyEditForm(true);
   };
 
@@ -353,6 +358,7 @@ function VendorCategoryDetailsTable() {
           propertyDescription: propertyDescription,
           propertyType: propertyType,
           inputs: propertyInputs,
+          multiSelectWithTextInputs: multiSelectWithTextInputs,
         }),
       });
 
@@ -368,10 +374,42 @@ function VendorCategoryDetailsTable() {
       setPropertyType("");
       setPropertyInputs([]);
       setOpenPropertyEditForm(false);
+      setMultiSelectWithTextInputs([]);
       getCategory();
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const addMultiSelecWithTextInputs = () => {
+    setMultiSelectWithTextInputs([
+      ...multiSelectWithTextInputs,
+      { subInputName: "", subPropertyDescription: "", subInputVariable: "" },
+    ]);
+  };
+
+  const removeMultiSelectWithTextInputs = (index) => {
+    const updatedInputs = [...multiSelectWithTextInputs];
+    updatedInputs.splice(index, 1);
+    setMultiSelectWithTextInputs(updatedInputs);
+  };
+
+  const handleSubInputNameChange = (index, value) => {
+    const updatedInputs = [...multiSelectWithTextInputs];
+    updatedInputs[index] = { ...updatedInputs[index], subInputName: value };
+    setMultiSelectWithTextInputs(updatedInputs);
+  };
+
+  const handleSubPropertyDescriptionChange = (index, value) => {
+    const updatedInputs = [...multiSelectWithTextInputs];
+    updatedInputs[index] = { ...updatedInputs[index], subPropertyDescription: value };
+    setMultiSelectWithTextInputs(updatedInputs);
+  };
+
+  const handleSubInputVariableChange = (index, value) => {
+    const updatedInputs = [...multiSelectWithTextInputs];
+    updatedInputs[index] = { ...updatedInputs[index], subInputVariable: value };
+    setMultiSelectWithTextInputs(updatedInputs);
   };
 
   useEffect(() => {
@@ -587,8 +625,15 @@ function VendorCategoryDetailsTable() {
             onChange={(e) => setPropertyType(e.target.value)}
           >
             <FormControlLabel value="textInput" control={<Radio />} label="Text Input" />
+            <FormControlLabel value="numeric" control={<Radio />} label="Numeric Input" />
             <FormControlLabel value="radioButton" control={<Radio />} label="Radio Button" />
             <FormControlLabel value="multiSelect" control={<Radio />} label="Multi Select" />
+            <FormControlLabel value="textArea" control={<Radio />} label="Text Area" />
+            <FormControlLabel
+              value="multiSelectWithText"
+              control={<Radio />}
+              label="Multi Select With Text"
+            />
           </RadioGroup>
           {propertyType === "radioButton" && (
             <MDBox>
@@ -649,6 +694,60 @@ function VendorCategoryDetailsTable() {
                 Add Input
               </Button>
             </MDBox>
+          )}
+          {propertyType === "multiSelectWithText" && (
+            <>
+              {multiSelectWithTextInputs.map((input, index) => (
+                <MDBox key={index} display="flex" alignItems="center">
+                  <TextField
+                    margin="dense"
+                    id={`multiSelectWithTextDescription-${index}`}
+                    label={`Variable ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input.subInputVariable}
+                    onChange={(e) => handleSubInputVariableChange(index, e.target.value)}
+                    name="variable"
+                  />
+                  <TextField
+                    margin="dense"
+                    id={`multiSelectWithTextInput-${index}`}
+                    label={`Input ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input.subInputName}
+                    onChange={(e) => handleSubInputNameChange(index, e.target.value)}
+                    name="input"
+                  />
+                  <TextField
+                    margin="dense"
+                    id={`multiSelectWithTextDescription-${index}`}
+                    label={`Description ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input.subPropertyDescription}
+                    onChange={(e) => handleSubPropertyDescriptionChange(index, e.target.value)}
+                    name="description"
+                  />
+                  <IconButton
+                    aria-label="remove"
+                    onClick={() => removeMultiSelectWithTextInputs(index)}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                </MDBox>
+              ))}
+              <MDBox display="flex" alignItems="center">
+                <Button
+                  variant="contained"
+                  color="info"
+                  startIcon={<AddIcon />}
+                  onClick={addMultiSelecWithTextInputs}
+                >
+                  Add Input
+                </Button>
+              </MDBox>
+            </>
           )}
         </DialogContent>
         <DialogActions>
@@ -699,8 +798,15 @@ function VendorCategoryDetailsTable() {
             onChange={(e) => setPropertyType(e.target.value)}
           >
             <FormControlLabel value="textInput" control={<Radio />} label="Text Input" />
+            <FormControlLabel value="numeric" control={<Radio />} label="Numeric Input" />
             <FormControlLabel value="radioButton" control={<Radio />} label="Radio Button" />
-            <FormControlLabel value="multiSelect" control={<Radio />} label="Muulti Select" />
+            <FormControlLabel value="multiSelect" control={<Radio />} label="Multi Select" />
+            <FormControlLabel value="textArea" control={<Radio />} label="Text Area" />
+            <FormControlLabel
+              value="multiSelectWithText"
+              control={<Radio />}
+              label="Multi Select With Text"
+            />
           </RadioGroup>
           {propertyType === "radioButton" && (
             <MDBox>
@@ -761,6 +867,50 @@ function VendorCategoryDetailsTable() {
                 Add Input
               </Button>
             </MDBox>
+          )}
+          {propertyType === "multiSelectWithText" && (
+            <>
+              {multiSelectWithTextInputs.map((input, index) => (
+                <MDBox key={index} display="flex" alignItems="center">
+                  <TextField
+                    margin="dense"
+                    id={`multiSelectWithTextInput-${index}`}
+                    label={`Input ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input.subInputName}
+                    onChange={(e) => handleSubInputNameChange(index, e.target.value)} // Update subInputName
+                    name="input"
+                  />
+                  <TextField
+                    margin="dense"
+                    id={`multiSelectWithTextDescription-${index}`}
+                    label={`Description ${index + 1}`}
+                    type="text"
+                    fullWidth
+                    value={input.subPropertyDescription}
+                    onChange={(e) => handleSubPropertyDescriptionChange(index, e.target.value)} // Update subPropertyDescription
+                    name="description"
+                  />
+                  <IconButton
+                    aria-label="remove"
+                    onClick={() => removeMultiSelectWithTextInputs(index)}
+                  >
+                    <RemoveIcon />
+                  </IconButton>
+                </MDBox>
+              ))}
+              <MDBox display="flex" alignItems="center">
+                <Button
+                  variant="contained"
+                  color="info"
+                  startIcon={<AddIcon />}
+                  onClick={addMultiSelecWithTextInputs}
+                >
+                  Add Input
+                </Button>
+              </MDBox>
+            </>
           )}
         </DialogContent>
         <DialogActions>
