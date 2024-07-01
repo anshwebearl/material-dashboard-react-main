@@ -61,7 +61,7 @@ function DataTable({
   status,
   setStatus,
 }) {
-  const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 10;
+  const defaultValue = entriesPerPage.defaultValue ? entriesPerPage.defaultValue : 5;
   const entries = entriesPerPage.entries
     ? entriesPerPage.entries.map((el) => el.toString())
     : ["5", "10", "15", "20", "25"];

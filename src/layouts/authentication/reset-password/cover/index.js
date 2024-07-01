@@ -30,6 +30,7 @@ import bgImage from "assets/images/bg-reset-cover.jpeg";
 import { useEffect, useState } from "react";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import BasicLayout from "layouts/authentication/components/BasicLayout";
 
 function Cover() {
   const navigate = useNavigate();
@@ -140,7 +141,7 @@ function Cover() {
   }, []);
 
   return (
-    <CoverLayout coverHeight="50vh" image={bgImage}>
+    <BasicLayout coverHeight="50vh" image={bgImage}>
       {!otpVerified ? (
         otpSent ? (
           // otp
@@ -297,7 +298,7 @@ function Cover() {
           </MDBox>
         </Card>
       )}
-    </CoverLayout>
+    </BasicLayout>
   );
 }
 
