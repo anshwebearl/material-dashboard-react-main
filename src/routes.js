@@ -52,6 +52,10 @@ import VendorDetails from "layouts/vendors/vendorDetails";
 import VendorCategoryTable from "layouts/vendors/vendorCategory";
 import VendorCategoryDetailsTable from "layouts/vendors/vendorCategory/vendorCategoryDetails";
 import CategoryIcon from "@mui/icons-material/Category";
+import MembershipPlansTable from "layouts/membership-plans";
+import AddMembershipPlan from "layouts/membership-plans/add-plan";
+import EditMembershipPlan from "layouts/membership-plans/edit-plan";
+import ViewMembershipPlan from "layouts/membership-plans/view-plan";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -88,6 +92,38 @@ const routes = [
     icon: <CategoryIcon />,
     route: "/vendor-category/:id",
     component: <VendorCategoryDetailsTable />,
+  },
+  {
+    type: "collapse",
+    name: "Membersip Plans",
+    key: "membership-plans",
+    icon: <Icon fontSize="small">supervisor_account</Icon>,
+    route: "/membership-plans",
+    component: <MembershipPlansTable />,
+  },
+  {
+    type: "route",
+    name: "Add Membersip Plans",
+    key: "add-membership-plans",
+    icon: <Icon fontSize="small">supervisor_account</Icon>,
+    route: "/membership-plans/add-plan",
+    component: <AddMembershipPlan />,
+  },
+  {
+    type: "route",
+    name: "Edit Membersip Plans",
+    key: "edit-membership-plans",
+    icon: <Icon fontSize="small">supervisor_account</Icon>,
+    route: "/membership-plans/edit-plan/:id",
+    component: <EditMembershipPlan />,
+  },
+  {
+    type: "route",
+    name: "View Membersip Plans",
+    key: "view-membership-plans",
+    icon: <Icon fontSize="small">supervisor_account</Icon>,
+    route: "/membership-plans/view-plan/:id",
+    component: <ViewMembershipPlan />,
   },
   // {
   //   type: "collapse",
