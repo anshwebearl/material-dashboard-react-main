@@ -36,6 +36,7 @@ const token = localStorage.getItem("token");
 function EditMembershipPlan() {
   const [membershipCategory, setMembershipCategory] = useState("");
   const [price, setPrice] = useState("");
+  const [planDays, setPlanDays] = useState("");
   const [features, setFeatures] = useState([]);
   const [featureInput, setFeatureInput] = useState("");
   const [editingFeatureIndex, setEditingFeatureIndex] = useState(null);
@@ -65,6 +66,7 @@ function EditMembershipPlan() {
         console.log(jsonData);
         setMembershipCategory(jsonData.data.membership_category);
         setPrice(jsonData.data.price);
+        setPlanDays(jsonData.data.plan_days);
         const tempFeatures = jsonData.data.features.map((el) => el.name);
         setFeatures(tempFeatures);
       }
@@ -124,6 +126,13 @@ function EditMembershipPlan() {
       return;
     }
 
+    if (!planDays) {
+      setSnackbarMessage("Plan Days is required.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
     if (features.length < 2) {
       setSnackbarMessage("At least two features are required.");
       setSnackbarSeverity("error");
@@ -134,6 +143,7 @@ function EditMembershipPlan() {
     const membershipPlan = {
       membership_category: membershipCategory,
       price: Number(price),
+      plan_days: planDays,
       features,
     };
 
@@ -220,6 +230,17 @@ function EditMembershipPlan() {
                         name="price"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        fullWidth
+                      />
+                    </MDBox>
+                    <MDBox mb={2}>
+                      <label htmlFor="">Plan Days</label>
+                      <MDInput
+                        type="text"
+                        onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ""))}
+                        name="planDays"
+                        value={planDays}
+                        onChange={(e) => setPlanDays(e.target.value)}
                         fullWidth
                       />
                     </MDBox>

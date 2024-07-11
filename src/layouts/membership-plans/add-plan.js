@@ -36,6 +36,7 @@ const token = localStorage.getItem("token");
 function AddMembershipPlan() {
   const [membershipCategory, setMembershipCategory] = useState("");
   const [price, setPrice] = useState("");
+  const [planDays, setPlanDays] = useState("");
   const [features, setFeatures] = useState([]);
   const [featureInput, setFeatureInput] = useState("");
   const [editingFeatureIndex, setEditingFeatureIndex] = useState(null);
@@ -86,6 +87,13 @@ function AddMembershipPlan() {
       return;
     }
 
+    if (!planDays.trim()) {
+      setSnackbarMessage("Plan Days is required.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      return;
+    }
+
     if (features.length < 2) {
       setSnackbarMessage("At least two features are required.");
       setSnackbarSeverity("error");
@@ -96,6 +104,7 @@ function AddMembershipPlan() {
     const membershipPlan = {
       membership_category: membershipCategory,
       price: Number(price),
+      plan_days: Number(planDays),
       features,
     };
 
@@ -182,6 +191,17 @@ function AddMembershipPlan() {
                         name="price"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        fullWidth
+                      />
+                    </MDBox>
+                    <MDBox mb={2}>
+                      <label htmlFor="">Plan Days</label>
+                      <MDInput
+                        type="text"
+                        onInput={(e) => (e.target.value = e.target.value.replace(/[^0-9]/g, ""))}
+                        name="planDays"
+                        value={planDays}
+                        onChange={(e) => setPlanDays(e.target.value)}
                         fullWidth
                       />
                     </MDBox>
